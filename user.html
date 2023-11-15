@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    {% load static %}
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: linear-gradient(90deg, #57dbb4, #f0f0f0, #c3dbd2, #add4b5);
+
+
+
+        }
+
+
+
+        p {
+            font-weight: bolder;
+
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        #bala {
+            background: linear-gradient(90deg, #4e4e4e, rgb(27, 27, 27)#c3dbd2, #2a2e2b);
+
+
+        }
+    </style>
+
+</head>
+
+<body>
+    {% for i in messages %}
+    {% if message.tags == 'success' %}
+    <script>toastr.success(`{{i}}`)</script>
+    {% else %}
+    <script>toastr.error(`{{i}}`)</script>
+
+    {%endif%}
+
+
+    {%endfor%}
+
+
+
+
+
+
+    <section class="container-fluid py-5">
+
+        <div class="" id="bala">
+            <div class="row">
+                <div class="col-md-4">
+
+
+                    <div>
+                        <button id="connect-button" class="btn btn-outline-primary mt-3 " onclick="connect()">Connect
+                            Metamask</button>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                    <div>
+                        <button id="disconnect-button" class="btn btn-outline-danger mt-3 "
+                            onclick="disconnect()">DisConnect</button>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div>
+                        <button onclick="switch_account()   " class="btn btn-outline-success mt-3 "> switch </button>
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+        <div>
+            <p id="wallet"> </p>
+
+            <p id="amount"></p>
+            <p id="result"></p>
+
+        </div>
+
+
+
+    </section>
+
+
+
+
+    <section class="container-fluid mt-5  ">
+
+
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body bg-body-tertiary ">
+                        <h5 class="card-title">Transaction</h5>
+                        <div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Address</label>
+                                <input type="text" class="form-control" id="to" placeholder="Address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Enter Transaction Amount</label>
+                                <input type="text" class="form-control" id="amount2" aria-describedby="emailHelp"
+                                    placeholder="Enter ETH">
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your privatekey
+                                    with
+                                    anyone else.</small>
+                            </div>
+
+
+
+                            <button onclick="transaction()" class="btn btn-outline-dark mt-3 ms-4"> Transaction
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body bg-dark-subtle ">
+                        <h5>Token Sender</h5>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">To Address : </label>
+                            <input type="text" class="form-control" id="recipientAddress"
+                                placeholder="Enter To address">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Contracter Address : : </label>
+                            <input type="text" class="form-control" id="tokenContractAddress"
+                                placeholder="Enter To address">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Token Amount : </label>
+                            <input type="text" class="form-control" id="tokenAmount" placeholder="Enter To address">
+                        </div>
+
+
+                        <button onclick="sendTokens()" class="btn btn-outline-dark mt-3 ms-4">SendToken</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <p>0x43c7649B8F8b25936482aEf75ebFFAf625eFB91F</p>
+    <p>0xc47C45eE0FBFC6499B4FB7A6e2b4Ad94043D5a6a</p>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"
+        integrity="sha512-5erpERW8MxcHDF7Xea9eBQPiRtxbse70pFcaHJuOhdEBQeAxGQjUwgJbuBDWve+xP/u5IoJbKjyJk50qCnMD7A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+        </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+        var wallet = localStorage.getItem("wallet");
+
+        if (wallet == "metamask") {
+
+            let account;
+
+            ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+                account = accounts[0];
+                console.log(account);
+                // document.getElementById("wallet").innerHTML= (account)
+                let bala = document.getElementById("wallet");
+                bala.innerHTML = `Account Details : ${account}`;
+
+
+                ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] }).then(result => {
+                    console.log(result);
+                    let wei = parseFloat(result, 16);
+                    let balance = wei / (10 ** 18);
+                    let bala = document.getElementById("amount");
+                    // bala.innerHTML =  `Balance Details : ${balance}`;
+                    var loc = localStorage.getItem("balance")
+                    console.log(loc)
+                    bala.innerHTML = `Balance Details : ${loc}`;
+
+
+                    // document.getElementById("amount").innerHTML= (  "Balance : " ,balance)
+
+                    console.log(balance + " ETH");
+
+
+
+
+
+                })
+
+            });
+
+        }
+        else (document.getElementById("wallet").innerHTML = ("account Not Connected"))
+
+
+
+        window.ethereum.on("accountsChanged", () => {
+            connect()
+        })
+
+
+
+        function history(id) {
+            console.log(id, 'This Id number')
+            var values = { "ID": id }
+            $.ajax({
+                type: 'post',
+                url: '/updateswap_history/',
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                data: JSON.stringify(values),
+                success: function (data) {
+                    alert(data, "claimed")
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(error);
+                }
+            });
+        };
+
+
+        function connect() {
+
+            {
+                let account;
+
+                ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+                    account = accounts[0];
+
+                    console.log(account);
+
+
+                    localStorage.setItem("account", account)
+
+                    ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] }).then(result => {
+                        console.log(result);
+                        let wei = parseInt(result, 16);
+                        let balance = wei / (10 ** 18);
+                        var a = localStorage.getItem("balance");
+                        location.reload();
+                        console.log(balance + " ETH");
+                        localStorage.setItem("balance", balance)
+                        localStorage.setItem("wallet", "metamask")
+
+
+
+                        console.log(account, 'This Id number')
+                        var values = { "ID": account }
+                        $.ajax({
+                            type: 'post',
+                            url: '/updateswap_history/',
+                            csrfmiddlewaretoken: "{{csrf_token}}",
+                            data: JSON.stringify(values),
+                            success: function (data) {
+                                alert(data, "claimed")
+                                console.log(data);
+                            },
+                            error: function (data) {
+                                console.log(error);
+                            }
+                        });
+
+                    });
+                });
+            }
+
+        }
+
+
+
+        // async const sendEthButton = document.querySelector('.sendEthButton');
+
+        //     let accounts = [];
+
+        //Sending Ethereum to an address
+        //   sendEthButton.addEventListener('click', () => {
+        //     ethereum
+
+        // var web3 = new Web3 (Web3.givenProvider);
+        // var to = document.getElementById("to").value
+        // var a = document.getElementById("amount2").value
+        // var weiAmount = web3.utils.toWei(a, 'ether');
+        //       .request({
+        //         method: 'eth_sendTransaction',
+        //         await web3.eth.sendTransaction({
+        //           from: senderAddress,
+        //           to: recipientAddress,
+        //           value: weiAmount,
+        //           gasPrice: web3.utils.toWei('5', 'gwei'),
+        //       });
+        //       })
+        //       .then((txHash) => console.log(txHash))
+        //       .catch((error) => console.error);
+        //   });
+
+
+
+
+
+
+
+        async function getAccount() {
+            accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+
+        }
+        getAccount();
+
+
+        function disconnect() {
+
+
+
+            ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+                localStorage.removeItem("account")
+                localStorage.removeItem("balance")
+                localStorage.removeItem("wallet")
+
+
+                location.reload();
+
+            });
+        };
+
+
+
+
+
+
+        function switch_account() {
+            if (typeof window.ethereum !== 'undefined') {
+                const ethereum = window.ethereum;
+
+                ethereum
+                    .request({ method: 'eth_chainId' })
+                    .then((chainId) => {
+                        if (chainId === '0x61') {
+
+                            console.log('Connected to BSC Testnet');
+                            //   alert('Connected to BSC Testnet')
+                        } else {
+
+                            const chainIdToSwitchTo = '0x61';
+                            ethereum.request({
+                                method: 'wallet_addEthereumChain', params: [{
+                                    chainId: chainIdToSwitchTo,
+                                    chainName: 'Binance Smart Chain Testnet',
+                                    rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+                                    nativeCurrency: { name: 'BNB', symbol: 'bnb', decimals: 18 },
+                                    blockExplorerUrls: ['https://testnet.bscscan.com/'],
+                                },
+                                ],
+                            })
+                                .then(() => {
+                                    console.log('Switched to BSC Testnet');
+                                })
+                                .catch((error) => {
+                                    console.error('Failed to switch to BSC Testnet:', error);
+                                });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error checking chain ID:', error);
+                    });
+            } else {
+                console.error('MetaMask is not available. Please install it.');
+            }
+        }
+
+
+        async function transaction() {
+
+
+            var web3 = new Web3(Web3.givenProvider);
+            var to = document.getElementById("to").value
+            var a = document.getElementById("amount2").value
+            var weiAmount = web3.utils.toWei(a, 'ether');
+
+            try {
+                web3 = new Web3(web3.givenProvider);
+                if (web3.currentProvider.isMetaMask === true) {
+                    const accounts = await web3.eth.getAccounts();
+                    const senderAddress = accounts[0];
+
+                    params = await web3.eth.sendTransaction({
+                        from: senderAddress,
+                        to: to,
+                        value: weiAmount,
+                        gasPrice: web3.utils.toWei('5', 'gwei'),
+                    })
+
+                    document.getElementById("result").innerText = `Sent ${bnbAmount} BNB to ${recipientAddress}`;
+                } else {
+                    document.getElementById("result").innerText = "Please connect to a BSC wallet (e.g., MetaMask) first.";
+                }
+            } catch (error) {
+                document.getElementById("result").innerText = `Error: ${error.message}`;
+            }
+
+            let result = await window.ethereum.request({ method: "eth_sendTransaction", params }).catch((err) => { })
+            console.log(result)
+        }
+
+
+
+
+
+
+
+
+        function connectWithMetaMask() {
+            let account;
+            let bala = document.getElementById("bala");
+
+            if (typeof window.ethereum !== 'undefined') {
+                const ethereum = window.ethereum;
+
+
+
+                ethereum.request({ method: 'eth_requestAccounts' })
+                    .then(accounts => {
+                        console.log('Connected to MetaMask');
+                        account = accounts[0];
+                        console.log(account);
+                        bala.innerHTML = `Account Details : ${account}`;
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            } else {
+                console.log('MetaMask is not available. Please install it.');
+            }
+        }
+
+
+
+
+        function myFunction() {
+            alert("Hello from a static file!");
+        }
+        function history(id) {
+            console.log(id, 'This Id number')
+            var values = { "ID": id }
+            $.ajax({
+                type: 'post',
+                url: '/updateswap_history/',
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                data: JSON.stringify(values),
+                success: function (data) {
+                    alert(data, "claimed")
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(error);
+                }
+            });
+        };
+
+
+        var abi =
+            [{ "inputs": [{ "internalType": "address", "name": "router", "type": "address" }, { "internalType": "address payable", "name": "_marketingWallet", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "spender", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "receiver", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "Claim", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "newLimit", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetBNBLimit", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "account", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetExcludeFromFee", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "account", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetExcludeFromReward", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "account", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetIncludeInFee", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "account", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetIncludeInReward", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "newLiquidityFee", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetLiquidityFeePercent", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "_mFeePcent", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetMarketFeePercent", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "address", "name": "newMarketingWallet", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetMarketingWallet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "newMaxTxAmount", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetMaxTxPercent", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "caller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "newTaxFee", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SetTaxFeePercent", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "tokensSwapped", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "ethReceived", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "tokensIntoLiquidity", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SwapAndLiquify", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "bool", "name": "enabled", "type": "bool" }, { "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "SwapAndLiquifyEnabledUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "executionTime", "type": "uint256" }], "name": "TransferingTime", "type": "event" }, { "inputs": [], "name": "MAX_FEE", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_liquidityFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_maxLoopEstimation", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_maxTxAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "_taxFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "spender", "type": "address" }], "name": "allowance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "approve", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "claim", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "cycleInfo", "outputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "uint256", "name": "time", "type": "uint256" }, { "internalType": "uint256", "name": "totalRewardHolder", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "pure", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "subtractedValue", "type": "uint256" }], "name": "decreaseAllowance", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tAmount", "type": "uint256" }], "name": "deliver", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "excludeFromFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "excludeFromReward", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "token", "type": "address" }, { "internalType": "address", "name": "_to", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "failSafe", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "includeInFee", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "includeInReward", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "spender", "type": "address" }, { "internalType": "uint256", "name": "addedValue", "type": "uint256" }], "name": "increaseAllowance", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "initialliquidityCycle", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "isExcludedFromFee", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "isExcludedFromReward", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "limit", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "liquidityCycle", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "marketingFee", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "marketingWallet", "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "pure", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tAmount", "type": "uint256" }, { "internalType": "bool", "name": "deductTransferFee", "type": "bool" }], "name": "reflectionFromToken", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "newLimit", "type": "uint256" }], "name": "setBNBLimit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "liquidityFee", "type": "uint256" }], "name": "setLiquidityFeePercent", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_mFeePcent", "type": "uint256" }], "name": "setMarketFeePercent", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address payable", "name": "_newMarketingWallet", "type": "address" }], "name": "setMarketingWallet", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "maxLoopEstimation", "type": "uint256" }], "name": "setMaxLoopEstimation", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "maxTxAmount", "type": "uint256" }], "name": "setMaxTxPercent", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_numTokensSellToAddToLiquidity", "type": "uint256" }], "name": "setNumTokensSellToAddToLiquidity", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "_enabled", "type": "bool" }], "name": "setSwapAndLiquifyEnabled", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "taxFee", "type": "uint256" }], "name": "setTaxFeePercent", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "swapAndLiquifyEnabled", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "pure", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "rAmount", "type": "uint256" }], "name": "tokenFromReflection", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalFees", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transfer", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "address", "name": "recipient", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "uniswapV2Pair", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "uniswapV2Router", "outputs": [{ "internalType": "contract IUniswapV2Router02", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "userInfo", "outputs": [{ "internalType": "uint256", "name": "claimPoolId", "type": "uint256" }, { "internalType": "bool", "name": "eligible", "type": "bool" }, { "internalType": "uint256", "name": "time", "type": "uint256" }, { "internalType": "uint256", "name": "lastActiveCycle", "type": "uint256" }, { "internalType": "uint256", "name": "rewardInfoID", "type": "uint256" }, { "internalType": "uint256", "name": "prevClaimCycle", "type": "uint256" }, { "internalType": "uint256", "name": "lastClaimedCycle", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_user", "type": "address" }], "name": "viewReward", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "stateMutability": "payable", "type": "receive" }];
+
+
+        async function sendTokens() {
+
+            const recipientAddress = document.getElementById("recipientAddress").value;
+            const tokenContractAddress = document.getElementById("tokenContractAddress").value;
+            const tokenAmount = document.getElementById("tokenAmount").value;
+            try {
+                web3 = new Web3(web3.givenProvider);
+                if (web3.currentProvider.isMetaMask === true) {
+                    const accounts = await web3.eth.getAccounts();
+                    const senderAddress = accounts[0];
+                    const tokenContract = new web3.eth.Contract(abi, tokenContractAddress);
+                    const tokenAmountInWei = web3.utils.toWei(tokenAmount, 'ether');
+                    const gasPriceInWei = web3.utils.toWei('5', 'gwei');
+                    await tokenContract.methods.transfer(recipientAddress, tokenAmountInWei).send({ from: senderAddress, gasPrice: gasPriceInWei });
+                    var bal = await contract.methods.balanceOf(sender0xc47C45eE0FBFC6499B4FB7A6e2b4Ad94043D5a6).call();
+                    alert(bal);
+
+                    document.getElementById("result").innerText = `Sent ${tokenAmount} tokens to ${recipientAddress}`;
+                } else {
+                    document.getElementById("result").innerText = "Please connect to a BSC wallet (e.g., MetaMask) first.";
+                }
+            } catch (error) {
+                document.getElementById("result").innerText = `Error: ${error.message}`;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
