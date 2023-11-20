@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<!-- Favicons -->
+	
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}" media="all">
+	<script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+	<link href="{% static 'assets/images/favicon.png' %}" rel="icon">
+	<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+
+	<link href="  {% static 'assets/css/bootstrap.min.css' %} " rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet">
+	<link href="  {% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+	<link href="  {% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+	<link href="  {% static 'assets/css/style.css' %}" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	
+</head>
+
+<body>
+	{% block content %}
+	{% endblock content %}
+
+
+	{% block script %}
+	{% endblock script %}
+
+
+	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.easing.min.js' %}"></script>
+	<script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+	<script src="{% static 'assets/vendor/counterup/counterup.min.js' %} "></script>
+	<script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+	<script src="{% static 'assets/js/slick.min.js' %}"></script>
+	<script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>
