@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+{% load static %}
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Registration Form</title>
+  <!---Custom CSS File--->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="
+https://cdn.jsdelivr.net/npm/jquery-toast-plugin@1.3.2/dist/jquery.toast.min.js
+"></script>
+  <link href="
+https://cdn.jsdelivr.net/npm/jquery-toast-plugin@1.3.2/dist/jquery.toast.min.css
+" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js
+"></script>
+  <link href="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+" rel="stylesheet">
+
+
+<!-- toster link -->
+<script src="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+" rel="stylesheet">
+
+  <style>
+    span {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="container">
+    <div class="registration form">
+      {% if msgs %}
+      <script>
+        toastr.error(`{{msgs}}`)
+      </script>
+      {%endif%}
+      <header>Signup</header>
+
+      <form method="POST" id="first_form">
+        {% csrf_token %}
+
+
+        <input type="text" placeholder="Enter your username" name="username" id="username">
+        <input type="password" placeholder="Create a password" name="password1" id="password1">
+        <input type="password" placeholder="Confirm your password" name="password2" id="password2">
+        <input type="email" placeholder="Enter Email" name="email" id="email">
+        <input type="text" placeholder="Enter Phone number" name="phone" id="phone">
+        <input type="text" placeholder="Enter Contry" name="contry" id="contry">
+        <input type="text" placeholder="Gender" name="gender" id="gender">
+        <input type="submit" class="button" value="Signup">
+      </form>
+      <div class="signup">
+        <span class="signup">Already have an account?
+
+
+          <a href="/login">
+
+            <button type="button"   class="btn btn-outline-success">Login </button>
+           
+          </a>
+
+        </span>
+      </div>
+    </div>
+  </div>
+
+
+  <script>$(document).ready(function () {
+
+      $('#first_form').submit(function () {
+
+        var username = $('#username').val();
+        var phone = $('#phone').val();
+        var password1 = $('#password1').val();
+        var password2 = $('#password2').val();
+        var mail = $('#email').val();
+        var contry = $('#contry').val();
+        var gender = $('#gender').val();
+
+        $(".error").remove();
+
+        if (username.length < 5) {
+          $('#username').after('<span class="error">This field is required</span>');
+          toastr.error('please enter username','username')
+          return false;
+
+        }
+        if (password1.length < 8) {
+          $('#password1').after('<span class="error">Password must be at least 8 characters long</span>');
+          toastr.error('please enter Password','Password')
+          return false;
+        }
+        if (password2 != password1) {
+          $('#password2').after('<span class="error">Confirm Password Not Match Password</span>');
+       toastr.error('Does Not Match Password','confirm password')
+          return false;
+        }
+        if (mail.length < 10) {
+          $('#email').after('<span class="error">Email Field is required</span>');
+          toastr.error('please enter Mail','Email')
+          return false;
+        }
+
+
+        if (phone.length <= 9) {
+          $('#phone').after('<span class="error">Enter Phone Number</span>');
+
+          // $.toast(
+          //   {
+          //     text: ["phone number is Empty"],
+          //     hideAfter: 2000
+          //   }
+          // )
+          toastr.error('please enter Phone Number','Phone')
+          return false;
+        }
+
+        if (contry.length < 5) {
+          $('#contry').after('<span class="error">Contry Field is requird</span>');
+
+          toastr.error('Enter Contry','Contry')
+
+          return false;
+        }
+
+
+        if (gender.length < 3) {
+          $('#gender').after('<span class="error">field is empty</span>');
+          toastr.error('Enter Gender','Gender')
+
+          return false;
+        }
+
+
+
+      });
+
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
